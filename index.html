@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What’s for Dinner? — Instant Recipe & Ingredient Finder</title>
+  <meta name="description" content="Find mouth-watering dinner recipes by ingredients you have at home. Includes step-by-step instructions, ingredients checklist, YouTube tutorials, and surprise meal picker.">
+  <meta name="theme-color" content="#ff5722">
+
+  <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+  <!-- Background Glow Accents -->
+  <div class="bg-blur-glow bg-blur-1" aria-hidden="true"></div>
+  <div class="bg-blur-glow bg-blur-2" aria-hidden="true"></div>
+
+  <!-- Header & Navigation -->
+  <header class="site-header" id="site-header">
+    <div class="header-container">
+      <a href="#" class="brand-logo" id="brand-logo" aria-label="What's for Dinner Home">
+        <span class="logo-icon">🍲</span>
+        <span class="logo-text">What’s for <span class="highlight">Dinner?</span></span>
+      </a>
+
+      <div class="header-actions">
+        <button type="button" class="btn-surprise" id="btn-surprise-header" title="Pick a random delicious meal!">
+          <span class="btn-icon">✨</span>
+          <span class="btn-text">Surprise Me!</span>
+        </button>
+
+        <button type="button" class="btn-favorites" id="btn-toggle-favorites" aria-label="View saved favorite recipes">
+          <span class="fav-icon">❤️</span>
+          <span class="fav-label">Favorites</span>
+          <span class="fav-badge" id="favorites-count">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Hero Section -->
+  <main class="main-content" id="main-content">
+    <section class="hero-section" id="hero-section">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          <span>Zero food waste • 100% Free Recipe Finder</span>
+        </div>
+        <h1 class="hero-title">
+          Turn What’s in Your Fridge into <span class="gradient-text">Tonight’s Dinner</span>
+        </h1>
+        <p class="hero-subtitle">
+          Type any ingredient you have—chicken, egg, paneer, or pasta—and discover step-by-step chef recipes in seconds.
+        </p>
+
+        <!-- Search Form -->
+        <form class="search-form" id="search-form" role="search" onsubmit="event.preventDefault();">
+          <div class="search-input-wrapper">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <input 
+              type="text" 
+              id="search-input" 
+              class="search-input" 
+              placeholder="Search by ingredient (e.g., chicken, potato) or dish name..."
+              autocomplete="off"
+              spellcheck="false"
+              aria-label="Search recipes by ingredient or dish name"
+            />
+            <button type="button" class="btn-clear" id="btn-clear-search" aria-label="Clear search input" style="display: none;">
+              ✕
+            </button>
+          </div>
+          <button type="submit" class="btn-search" id="btn-search-submit">
+            <span>Find Recipes</span>
+            <span class="search-arrow" aria-hidden="true">→</span>
+          </button>
+        </form>
+
+        <!-- Quick Filter Pills -->
+        <div class="category-filters-container" id="category-filters-container">
+          <span class="filters-label">Popular Categories:</span>
+          <div class="filter-pills" id="filter-pills" role="tablist" aria-label="Recipe categories">
+            <button type="button" class="pill-btn active" data-category="all" role="tab" aria-selected="true">
+              🌟 All Meals
+            </button>
+            <button type="button" class="pill-btn" data-category="Chicken" role="tab">
+              🍗 Chicken
+            </button>
+            <button type="button" class="pill-btn" data-category="Vegetarian" role="tab">
+              🥦 Vegetarian
+            </button>
+            <button type="button" class="pill-btn" data-category="Seafood" role="tab">
+              🦐 Seafood
+            </button>
+            <button type="button" class="pill-btn" data-category="Pasta" role="tab">
+              🍝 Pasta
+            </button>
+            <button type="button" class="pill-btn" data-category="Dessert" role="tab">
+              🍰 Dessert
+            </button>
+            <button type="button" class="pill-btn" data-category="Breakfast" role="tab">
+              🍳 Breakfast
+            </button>
+            <button type="button" class="pill-btn" data-category="Beef" role="tab">
+              🥩 Beef
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recipes Results Section -->
+    <section class="results-section" id="results-section" aria-live="polite">
+      <div class="section-header">
+        <div class="section-title-wrapper">
+          <h2 class="section-title" id="results-heading">Featured Delicious Meals</h2>
+          <span class="results-count-pill" id="results-count-pill">Showing recipes</span>
+        </div>
+
+        <div class="view-toggles" id="view-toggles">
+          <button type="button" class="view-tab-btn active" id="tab-all-recipes">
+            All Recipes
+          </button>
+          <button type="button" class="view-tab-btn" id="tab-favorite-recipes">
+            ❤️ Saved (<span id="tab-fav-counter">0</span>)
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading State (Skeletons) -->
+      <div class="recipes-grid skeleton-grid" id="loading-state" style="display: none;" aria-label="Loading recipes...">
+        <!-- Dynamic skeleton cards injected via JS or template -->
+        <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-sub"></div></div>
+        <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-sub"></div></div>
+        <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-sub"></div></div>
+        <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-sub"></div></div>
+        <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-sub"></div></div>
+        <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-sub"></div></div>
+      </div>
+
+      <!-- Active Recipe Cards Grid -->
+      <div class="recipes-grid" id="recipes-grid">
+        <!-- Recipe cards dynamically injected here -->
+      </div>
+
+      <!-- Empty / Not Found State -->
+      <div class="empty-state" id="empty-state" style="display: none;">
+        <div class="empty-icon" id="empty-icon">🍳</div>
+        <h3 class="empty-title" id="empty-title">No Matching Recipes Found</h3>
+        <p class="empty-description" id="empty-description">
+          We couldn't find any dishes with that ingredient or name. Try searching for common staples like <strong>chicken</strong>, <strong>egg</strong>, <strong>tomato</strong>, or explore our categories above!
+        </p>
+        <button type="button" class="btn-primary" id="btn-reset-search">
+          Reset Search & Explore
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Recipe Detail Modal Dialog -->
+  <div class="modal-overlay" id="recipe-modal" role="dialog" aria-modal="true" aria-labelledby="modal-recipe-title" style="display: none;">
+    <div class="modal-container" id="modal-container">
+      <button type="button" class="modal-close-btn" id="btn-close-modal" aria-label="Close recipe details">
+        ✕
+      </button>
+
+      <div class="modal-body" id="modal-content">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <p class="footer-brand">
+        🍲 <strong>What’s for Dinner?</strong> — Powered by <a href="https://www.themealdb.com" target="_blank" rel="noopener noreferrer">TheMealDB API</a>.
+      </p>
+      <p class="footer-note">Handcrafted with pure HTML, Modern CSS, and Vanilla JavaScript.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/favorites.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
